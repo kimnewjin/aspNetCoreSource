@@ -1,0 +1,6 @@
+﻿@addTagHelper *, wiseCamp
+<h3>페이징 테스트</h3>
+
+<dnn-paging-helper url="@Context.Request.Path" page-index ='Convert.ToInt32(Context.Request.Query["Page"])' page-size="10" record-count="135" search-mode="false" search-field="Name" search-query ="홍길동">
+
+</dnn-paging-helper>

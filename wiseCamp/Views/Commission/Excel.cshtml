@@ -1,0 +1,114 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+
+<!--수수료정산-->
+@model IEnumerable<CommissionExcel>
+
+@{
+    Layout = null;
+}
+
+<table border="1">
+
+    <tr>
+        <th rowspan="2">구매일자</th>
+        <th rowspan="2">수수료발생일</th>
+        <th rowspan="2">총구매건수</th>
+        <th colspan="11">총구매액</th>
+        <th rowspan="2">총수수료</th>
+        <th rowspan="2">수수료상태</th>
+    </tr>
+    <tr>
+        <th>6개월</th>
+        <th>12개월</th>
+        <th>15개월</th>
+        <th>18개월</th>
+        <th>24개월</th>
+        <th>6개월+PAD</th>
+        <th>12개월+PAD</th>
+        <th>15개월+PAD</th>
+        <th>18개월+PAD</th>
+        <th>24개월+PAD</th>
+        <th>총구매액</th>
+    </tr>
+    @if (Model != null)
+    {
+        int totalFee = 0;
+        @foreach (var item in Model)
+        {
+            string OrderDate = BoardLibrary.FuncShowDate(@item.orderDate);
+            string feeDate = BoardLibrary.FuncShowDate(@item.FeeDate);
+            int orderCount1 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1001, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay1 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1001, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee1 = orderCount1 * 330000;
+
+            int orderCount2 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1002, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay2 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1002, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee2 = orderCount2 * 550000;
+
+            int orderCount3 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1039, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay3 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1039, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee3 = orderCount3 * 616000;
+
+            int orderCount4 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1041, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay4 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1041, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee4 = orderCount4 * 682000;
+
+            int orderCount5 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1003, 1005, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay5 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1003, 1005, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee5 = orderCount5 * 330000;
+
+            int orderCount6 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1038, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay6 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1038, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee6 = orderCount6 * 550000;
+
+            int orderCount7 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1004, 1006, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay7 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1004, 1006, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee7 = orderCount7 * 6160000;
+
+            int orderCount8 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1040, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay8 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1040, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "B");
+            int orderFee8 = orderCount8 * 6820000;
+
+            int dealFee = orderFee1 + orderFee2 + orderFee3 + orderFee4 + orderFee5 + orderFee6 + orderFee7 + orderFee8;
+            totalFee = totalFee + dealFee;
+            <tr>
+                <td>@(OrderDate)</td>
+                <td>@(feeDate)</td>
+                <td>@item.orderCount</td>
+                <td>[@orderCount1]건<br /> @orderPay1 원</td>
+                <td>[@orderCount2]건<br /> @orderPay2 원</td>
+                <td>[@orderCount3]건<br /> @orderPay3 원</td>
+                <td>-</td>
+                <td>[@orderCount4]건<br /> @orderPay4 원</td>
+                <td>[@orderCount5]건<br /> @orderPay5 원</td>
+                <td>[@orderCount6]건<br /> @orderPay6 원</td>
+                <td>[@orderCount7]건<br /> @orderPay7 원</td>
+                <td>-</td>
+                <td>[@orderCount8]건<br /> @orderPay8 원</td>
+
+                <td>@item.payAmout</td>
+                <td>@dealFee</td>
+                <td>@item.feeStatus</td>
+            </tr>
+
+        }
+        <tr>
+            <th>총수수료</th>
+            <td colspan="15" style="text-align:right"><strong style="color:red;">@totalFee</strong>원</td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td colspan="15" style="text-align:center">결제내역이 없습니다.</td>
+        </tr>
+
+
+    }
+
+
+
+
+</table>
+

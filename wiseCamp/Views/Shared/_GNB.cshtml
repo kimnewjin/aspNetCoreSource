@@ -1,0 +1,484 @@
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="euc-kr">
+    <meta name="application-name" content="점수대박의씨! 수박씨닷컴" />
+    <title>와이즈캠프</title>
+    <environment names="Development">
+
+        <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="~/_library/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="~/_library/jquery/jQueryUI/jquery-ui.css">
+        <link rel="stylesheet" href="~/_library/fontAwesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="~/_library/hover/hover.css">
+        <link rel="stylesheet" href="~/_library/toastr/toastr.min.css" />
+        <script src="~/_library/jquery/jquery.min.2.1.3.js"></script>
+        <script language="javascript" src="~/js/site.js"></script>
+        <link rel="stylesheet" href="~/css/common.css">
+        
+    </environment>
+    <environment names="Staging,Production">
+        <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="/_library/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="~/_library/jquery/jQueryUI/jquery-ui.css">
+        <link rel="stylesheet" href="~/_library/fontAwesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="~/_library/hover/hover.css">
+        <link rel="stylesheet" href="~/_library/toastr/toastr.min.css" />
+        <script src="~/_library/jquery/jquery.min.2.1.3.js"></script>
+        <script language="javascript" src="~/js/site.js"></script>
+        <link rel="stylesheet" href="~/css/common.css">
+    </environment>
+    @Html.Raw(JavaScriptSnippet.FullScript)
+
+    <script language="javascript">
+        function goLogOut() {
+            location.href = "/Admin/Index/Logout";
+
+        }
+    </script>
+    @if (@ViewBag.SessionAdminName == "" || ViewBag.SessionAdminName == null)
+    {
+        <script language="javascript">
+           location.href = "/Admin/Index/Logout";            
+        </script>
+
+    }
+
+</head>
+
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="container-fluid" style="padding-right:0;">
+            <div id="divLNB" class="sidebar">
+                <div style="height:73px;">
+                    <a class="navbar-brand" href="#">
+                        <img src="http://lgimg.soobakc.com/images/footer/footer_logo.jpg" style="float:left;display:none;" /> 
+                        <img src="http://lgimg.soobakc.com/_images/_common/h1.gif" height="50" style="float:left;" /></a>
+                </div>
+                <nav class="nav nav-pills nav-stacked vLine">
+                    <div class="list-group" style="margin:0;padding:0;">
+                        <a href="#none" class="list-group-item " id="lnbTitle">
+                            <i class="menu-icon fa <%=menuCategory1Icon%>"></i>
+                            <span class="menu-text"> 와이즈캠프 </span>
+                            <i class="fa fa-exchange waves-effect waves-circle" style="background: #ff6400;color:#fff;float:right;font-size:12px;margin-right:5px;" onclick="toggleLNB();" title="화면크기"></i>
+                        </a><br />
+                        <table class="table table-bordered table-hover table-list">
+                            <tr>
+                                <td colspan="2" style="height:50px;"> @ViewBag.SessionAdminName 님<br /> 반갑습니다.</td>
+                            </tr>
+                            <tr>
+                                <th>현재 접속위치</th>
+                                <td>@ViewBag.userIP </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button" class="btn btn-default  tooltips" title="로그아웃" data-toggle="tooltip" onclick="goLogOutAction();">
+                                        <i class="fa fa-user"></i>  로그아웃
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </nav>            
+            </div>
+            <div id="divMainContainer">
+                <div class="hLine" style="position: relative; background-color: white;height:70px;margin-bottom:10px;width:100%;">
+                    <div class="" style="position:relative;margin:0; padding:5px 10px 1px 0; height:20px; text-align:right;">
+                       <button type="button" class="btn btn-danger btn-sm tooltips" title="로그아웃" data-toggle="tooltip" onclick="goLogOut();">
+                            <i class="fa fa-sign-out "></i> 로그아웃
+                       </button>
+                    </div>
+                    <div>
+                        <nav class="navbar navbar-inverse" style="min-height: 40px; margin: 9px 0 10px 0; overflow:hidden;">
+                            <div class="container-fluid">
+                                
+                                <div>                               
+                                    <button type="button" class="navbar-toggle collapsed" id="btnLnbToggle" href="#1" onclick="$('#divLNB').slideToggle('fast');" style="float:left !important; z-index:3000; margin-top: 1px;">
+                                        <span class="sr-only">Toggle LNB</span>
+                                        <span class="fa fa-navicon"></span>
+                                        <span class="fa fa-angle-down"></span>
+                                    </button>
+                                </div>
+
+                                <div class="navbar-header">                                
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" href="#gnbMenu" aria-expanded="false" aria-controls="gnbMenu" style="float:right !important;  margin:2px 10px; z-index:3000;">
+                                        <span class="sr-only">Toggle GNB</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+
+
+
+                           
+                                <div class="collapse navbar-collapse collape" id="gnbMenu" style="background-color:<%=gnbColorCode%>;min-width:980px !important;">
+                                    <ul class="nav navbar-nav" style="">                                   
+                                        <li class="gnbOn">
+                                            <a href="/Member/Index" class="hvr-glow">
+                                                <i class="menu-icon fa fa-list "></i> 가입현황
+                                            </a>                                      
+									    </li>
+                                        <li class="gnbOn">
+                                            <a href="/Sales/Index" class="hvr-glow">
+                                                <i class="menu-icon fa fa-list "></i> 결제현황
+                                            </a>
+                                        </li>
+                                        <li class="gnbOn">
+                                            <a href="/Commission/Index" class="hvr-glow">
+                                                <i class="menu-icon fa fa-list "></i> 수수료정산
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+							
+                            </div>
+						    
+                        </nav>
+                    </div>
+
+                </div>
+
+
+              
+                <ol class="breadcrumb breadcrumb-arrow" style="padding:10px;margin-top:-10px; margin-left:1px;">
+                    <li></li>
+                    <li></li>
+                    <li class="active"></li>
+
+                </ol>
+                <div class="contentsMain">
+                    @RenderBody()
+                </div>
+                <div class="footer">
+                    <div class="footer-inner">
+                        <div class="footer-content">
+
+                            <div class="vsLogo">
+                                <img src="/images/footer_logo.png" width="89" height="57" alt="비상" />
+                            </div>
+                            <div class="info">
+                                <ul>
+                                    <li><a href="http://company.visang.com/" target="_blank" class="menu01">회사소개</a></li>
+                                    <li><a href="http://www.visang.com/book/Customer/QnaRetrieve.aspx" target="_blank" class="menu02">Q&A</a></li>
+                                    <!--li><a href="#" target="_blank" class="menu03"><img src="/BookStore/images/common/footer/footer_menu03.png" alt="사이트맵" /></a></li-->
+                                    <li><a href="http://www.visang.com/book/Customer/ContactUs.aspx" target="_blank" class="menu04">오시는길</a></li>
+                                    <li><a href="http://www.visang.com/book/Member/Privacy.aspx" target="_blank" class="menu05">개인정보 취급방침</a></li>
+                                    <li class="last"><a href="http://www.visang.com/book/Member/Agreement.aspx" target="_blank" class="menu06">이용약관</a></li>
+                                    <!--li class="last"><a href="#" target="_blank" class="menu07"><img src="/BookStore/images/common/footer/footer_menu07.png" alt="제휴문의" /></a></li-->
+                                </ul>
+
+
+                                <address class="addr">
+                                    (주)비상교육  대표자명 : 양태회 &#160;주소 : 서울시 구로구 디지털로 33길 48 대륭포스트타워 7차 20층<br />사업자등록번호 : 211-87-07735 &#160;통신판매업신고번호 : 제2006-02731호 &#160;TEL.1544-0554 &#160;FAX.02-6970-6148 &#160;E-mail. <a href="mailto:webmaster@visang.com">webmaster@visang.com</a>
+                                    <p>
+                                        Copyright ⓒ <strong>2015 비상교육.</strong>  All rights reserved.
+                                        <span id="sessionInfo" style="font-size:0.8em;margin-left:10px;">리프레시시간 : 2017-09-26 오후 4:46:08 / 세션 : / 쿠키 :  / 메뉴 : 0I0I0</span>
+                                    </p>
+                                </address>
+
+
+
+                                <div class="familySite" style="display:none;">
+                                    <span>family site</span>
+                                    <div class="site">
+                                        <dl>
+                                            <dt>비상교재</dt>
+                                            <dd><a href="http://www.visang.com/book" target="_blank">비상교재</a>, <a href="http://studylab.visang.com/" target="_blank">비상공부연구소</a>, <a href="http://www.wanja.co.kr/" target="_blank">완자</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>학원교육</dt>
+                                            <dd><a href="http://www.ivytz.com/" target="_blank">비상아이비츠학원</a>, <a href="http://www.math-can.com/" target="_blank">매쓰캔수학</a>,<br /><a href="http://www.visangcp.com" target="_blank">비상에듀학원</a>, <a href="http://www.englisheye.co.kr/" target="_blank">잉글리쉬아이</a>,<br /><a href="http://www.visangplus.com/" target="_blank">비상플러스</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>학부모교육</dt>
+                                            <dd><a href="http://www.momntalk.com/" target="_blank">맘앤톡</a></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="site">
+                                        <dl>
+                                            <dt>비상교과서</dt>
+                                            <dd><a href="http://www.visang.com/book/TextBook/SubMain.aspx" target="_blank">비상교과서</a>, <a href="http://www.vivasam.com/" target="_blank">비바샘</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>모의고사</dt>
+                                            <dd><a href="http://ipsi.visang.com/" target="_blank">비상모의고사</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>한국어교육</dt>
+                                            <dd><a href="http://www.masterkorean.com" target="_blank">마스터코리안</a>, <a href="http://www.mastertopik.com" target="_blank">마스터토픽</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>디지털교육</dt>
+                                            <dd>TReE, 디지털 교과서</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>인쇄사업</dt>
+                                            <dd><a href="http://terabooks.co.kr/" target="_blank">테라북스</a></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="site last">
+                                        <dl>
+                                            <dt>온라인교육</dt>
+                                            <dd><a href="http://www.isoobakc.com" target="_blank">아이수박씨</a>, <a href="http://www.soobakc.com" target="_blank">수박씨</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>교원연수</dt>
+                                            <dd><a href="http://www.tschool.net/" target="_blank">티스쿨</a></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>유아교육</dt>
+                                            <dd><a href="http://www.ebsnurisam.com/" target="_blank">EBS 누리샘</a></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .footer {
+                        overflow: hidden;
+                        width: 100%;
+                        padding-bottom: 10px;
+                    }
+
+                        .footer .footer-inner {
+                            border-top: 1px solid silver;
+                            margin-top: 50px;
+                        }
+
+                    .footer-content .vsLogo {
+                        float: left;
+                        width: 133px;
+                        padding-top: 28px;
+                        text-align: center;
+                    }
+
+                    .footer-content .info .addr {
+                        position: relative;
+                        margin-bottom: 23px;
+                        color: #aaa;
+                        line-height: 16px;
+                    }
+
+                    .footer-content .info {
+                        float: left;
+                        padding-top: 30px;
+                    }
+
+                        .footer-content .info UL {
+                            display: none;
+                            width: 100%;
+                            height: 33px;
+                            list-style: none;
+                            padding-left: 0;
+                        }
+
+                            .footer-content .info UL LI {
+                                float: left;
+                                padding: 0 28px 0 0;
+                                list-style: none;
+                            }
+
+                        .footer-content .info .familySite span {
+                            float: left;
+                            width: 73px;
+                            height: 13px;
+                            font-weight: bold;
+                        }
+
+                        .footer-content .info .familySite .site {
+                            float: left;
+                            width: 238px;
+                            padding-left: 23px;
+                        }
+
+                        .footer-content .info .familySite .last {
+                            width: 200px;
+                            background: none;
+                        }
+                </style>
+            </div>
+        </div>
+        <environment names="Development">
+            <script src="/_library/jquery/jquery.min.2.1.3.js"></script>
+            <script src="/_library/jquery/jQueryUI/jquery-ui.min.js"></script>
+            <script src="/_library/bootstrap/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="/_library/toastr/toastr.min.js"></script>
+        </environment>
+            <script type="text/javascript">
+			<!--
+				//기본달력
+				$( ".jQueryCalendar" ).datepicker({
+					showButtonPanel: true,
+					changeMonth: true,
+					changeYear: true,
+					dateFormat: 'yy-mm-dd',
+                    monthNames:[1,2,3,4,5,6,7,8,9,10,11,12],
+					//애니
+					showAnim:'slideDown'
+				});
+				$( ".jQueryCalendar" ).attr('autocomplete', 'off');
+				//lnb토글
+				function toggleLNB(){
+					if($('#btnLnbToggle').css('display') == 'none')
+					{
+						$('#divMainContainer').css('padding-left', '1px');
+						$('#divLNB').css({ 'position':'absolute', 'top':'2px', 'display':'none', 'z-index':'1000' });
+						$('#btnLnbToggle').css( {'display':'block'} );
+					}
+					else
+					{
+						$('#divMainContainer').css('padding-left', '200px');
+						$('#divLNB').css({ 'position':'absolute', 'top':'0', 'display':'block', 'z-index':'2000' });
+						$('#btnLnbToggle').css( {'display':'none'} );
+					}
+				}
+
+
+
+				//lnbSubmenuToggle
+				function toggleLNBSub(objSelItem, selSubItem){
+					var $ojSelSubItem = $(objSelItem).find('i');
+
+					if($ojSelSubItem.hasClass("fa-plus"))
+					{
+						$ojSelSubItem.removeClass( 'fa-plus' );
+						$ojSelSubItem.addClass( 'fa-minus' );
+					}
+					else
+					{
+						$ojSelSubItem.removeClass( 'fa-minus' );
+						$ojSelSubItem.addClass( 'fa-plus' );
+					}
+
+					$('#'+selSubItem).slideToggle('fast', function() {
+						//lnb 세로사이즈조정
+
+						//lnb사이즈조정
+						resizingLNB();
+					});
+				}
+
+
+				//lnb사이즈조정
+				function resizingLNB(){
+					if($('.list-group').height() <= $('#divMainContainer').height()+30 )
+					{
+						if( $('#divMainContainer').height() <= $(window).height() )
+						{
+							$('.vLine').height($(window).height()+20);
+						}
+						else
+						{
+							$('.vLine').height($('#divMainContainer').height()+20);
+						}
+					}
+					else
+					{
+						if( $('.list-group').height() <= $(window).height() )
+						{
+							$('.vLine').height($(window).height()+20);
+						}
+						else
+						{
+							$('.vLine').height($('.list-group').height()+20);
+						}
+					}
+				}
+				resizingLNB();
+
+				//화면확장쿠키처리
+				function toggleExpand(){
+					if(getCookie('isExpanded')=='1')
+					{
+						setCookie('isExpanded', '0', 365);
+
+						$('#divLNB').css('left','auto');
+						$('.container-fluid').toggleClass('container');
+						$('.container-fluid').toggleClass('container-fluid');
+						$('.fa-compress').toggleClass('fa-expand');
+						$('.fa-compress').toggleClass('fa-compress');
+					}
+					else
+					{
+						setCookie('isExpanded', '1', 365);
+
+						$('.container').toggleClass('container-fluid');
+						$('.container').toggleClass('container');
+						$('.fa-expand').toggleClass('fa-compress');
+						$('.fa-expand').toggleClass('fa-expand');
+					}
+
+				}
+				//날짜관련jquery확장
+				$.extend({
+					//=====================================================================================
+					// 두 날짜간의 차이
+					// dateType : w : 주 , d : 일, h : 시, n : 분, s : 초
+					//=====================================================================================
+					getDateDiff: function(dateType, toDate, fromDate){
+						var dateType = dateType.toLowerCase();
+						var fromDate = fromDate == null ? $.getToday(1) : fromDate;
+						var splitFromDate = fromDate.split("-");
+						var splitToDate = toDate.split("-");
+						var divideNum = { w: 604800000, d: 86400000, h: 3600000, n: 60000, s: 1000 };
+						var dateGap;
+
+
+						fromDate = Date.UTC(splitFromDate[0], parseInt(splitFromDate[1], 10) + 1, splitFromDate[2]);
+						toDate = Date.UTC(splitToDate[0], parseInt(splitToDate[1], 10) + 1, splitToDate[2]);
+
+						dateGap = Math.floor((toDate - fromDate) / divideNum[dateType]);
+
+						return dateGap;
+					},
+					//=====================================================================================
+					// 오늘 날짜
+					//=====================================================================================
+					getToday: function(dateType){
+						var today = new Date();
+
+						switch (dateType){
+							case 1 :
+								today = today.getFullYear() + "-" + $.addZero(today.getMonth() + 1) + "-" + $.addZero(today.getDate());
+								break;
+							case 2 :
+								today = today.getFullYear() + $.addZero(today.getMonth() + 1) + $.addZero(today.getDate());
+								break;
+						}
+
+						return today;
+					},
+					//=====================================================================================
+					// 10 이하 숫자 앞에 0 삽입
+					//=====================================================================================
+					addZero: function(number){
+						return parseInt(number, 10) < 10 ? "0" + number : number;
+					}
+				});
+			//-->
+            </script>
+            @RenderSection("Scripts", required: false)
+            }
+            else
+            {
+            <script language="javascript">
+                location.href = "/Home/Index";
+            </script>
+
+            }
+
+
+</body>
+</html>

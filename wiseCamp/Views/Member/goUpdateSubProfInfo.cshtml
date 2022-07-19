@@ -1,0 +1,21 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+
+
+@if (@ViewBag.UpdateSubProfInfoFlag == 1){
+
+    <script language="javascript">
+        alert('처리가 완료되었습니다.');
+        window.close();
+        opener.location.reload();
+    </script>
+}
+else
+{
+    <script language="javascript">
+        alert('데이터 처리가 잘못되었습니다.');
+        window.close();
+        
+    </script>
+
+}

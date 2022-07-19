@@ -1,0 +1,67 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+@model IEnumerable<EidtSubPorfID>
+
+
+@{
+    Layout = "_Layout";
+}
+<script language="javascript">
+    function goAction() {
+        var frm = document.theForm;
+
+        var subProfID = $("input[name='subProfID']").val();
+
+        if (subProfID == "") {
+            alert('변경할 ID를 입력하세요.');
+            $("input[name='subProfID']").focus();
+            return;
+        }
+        var subProfName = $("input[name='subProfName']").val();
+
+        if (subProfName == "") {
+            alert('변경할 이름을 입력하세요.');
+            $("input[name='subProfName']").focus();
+            return;
+        }
+
+        frm.action = "/Member/goUpdateSubProfInfo";
+        frm.submit();
+
+    }
+</script>
+
+<form name="theForm" method="post">
+   <input type="hidden" name="mem_ID" value="@ViewBag.mem_ID" />
+   <input type="hidden" name="memIdx" value="@ViewBag.memIdx" />
+    <table class="table table-bordered table-condensed table-form">
+        <caption>@ViewBag.m_Name 님의 추천교사 정보변경</caption>
+        <tbody>
+            <tr class="hiddenTR">
+                <th width="100">추천교사ID</th>
+                <td class="aLeft">
+                    <input type="text" class="form-control" name="subProfID" value="@ViewBag.subProfID" />
+                </td>
+            </tr>
+            <tr class="hiddenTR">
+                <th width="100">추천교사이름</th>
+                <td class="aLeft">
+                    <input type="text" class="form-control" name="subProfName" value="@ViewBag.subProfName" />
+                </td>
+            </tr>
+
+         
+         
+        </tbody>
+    </table>
+</form>
+<div class="center-block pagenation-block">
+    <div class="btn-group pull-right" role="group" aria-label="게시판버튼" style="margin:0.5em 1em;">
+        <button type="button" class="btn btn-primary" onclick="goAction();">
+            <span class="fa fa-save"></span>저장
+        </button>
+        <button type="button" class="btn btn-primary" onclick="javascript:window.close();">
+            <span class="fa fa-close"></span>닫기
+        </button>
+    </div>
+</div>

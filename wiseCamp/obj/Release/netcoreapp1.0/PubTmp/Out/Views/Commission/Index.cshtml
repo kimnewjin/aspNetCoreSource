@@ -1,0 +1,202 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+
+@inject IMemberRepository DnnRepo
+<!--수수료정산-->
+@model IEnumerable<Commission>
+
+@{
+    Layout = "_GNB";
+}
+<script language="javascript">
+    $(document).ready(function () {
+        if ("@ViewBag.lpidx" != "") {
+            $("Select[name='productInfo']").val("@ViewBag.lpidx");
+        }
+        if ("@ViewBag.feeStatus" != "") {
+            $("Select[name='feeStatus']").val("@ViewBag.FeeStatus");
+        }
+    });
+
+    function goOrderByflag(btnName) {
+        $("input[name='OrderByFlag']").val(btnName);
+        var frm = document.searchForm;
+        frm.action = "/Member/Index";
+        frm.submit();
+    }
+
+    function goSearchAction() {
+
+        var frm = document.searchForm;
+        frm.action = "/Commission/Index";
+        frm.submit();
+    }
+
+    function goExcel() {
+        var frm = document.searchForm;
+        frm.action = "/Commission/Excel";
+        frm.submit();
+
+    }
+</script>
+
+<!-- 검색폼 -->
+<form class="form-inline" method="post" name="searchForm">
+    <input type="hidden" name="OrderByFlag" value="A" />
+    <input type="hidden" name="searchModeflag" value="true" />
+    <table class="table table-bordered table-condensed table-form">
+        <tbody>
+           
+            <tr class="hiddenTR">
+                <th width="100">상품정보</th>
+                <td class="aLeft">
+
+                    <select Name="productInfo" id="productInfo" class="form-control" asp-items="@(new SelectList(ViewBag.SalesProductItemList,"lp_idx","lp_title"))"></select>
+                </td>
+            </tr>
+            <tr class="hiddenTR">
+                <th width="100">수수료 상태</th>
+                <td class="aLeft">
+
+                    <select name="feeStatus" class="form-control" style="width:170px;">
+                        <option value="">--결제상태검색--</option>
+                        <option value="A">확정</option>
+                        <option value="B">미확정</option>                        
+                    </select>
+                </td>
+            </tr>
+          
+
+            <tr class="hiddenTR">
+                <th width="100">구매일자</th>
+                <td class="aLeft">
+                   
+                    <div class="input-group input-group-sm" style="width:180px;">
+                        <input type="text" class="form-control jQueryCalendar" name="startDate" placeholder="시작일" value="@ViewBag.startDate" />
+                        <span class="input-group-addon"><span class="fa fa-arrow-right"></span></span>
+                        <input type="text" class="form-control jQueryCalendar" name="endDate" placeholder="종료일" value="@ViewBag.endDate" />
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="center-block pagenation-block">
+        <div class="btn-group pull-right" role="group" aria-label="게시판버튼" style="margin:0.5em 1em;">
+            <button type="button" class="btn btn-primary" onclick="goSearchAction();">
+                <span class="fa fa-search"></span>검색
+            </button>
+            <button type="button" class="btn btn-primary" onclick="javascript:location.href='/Commission/Index';">
+                <span class="fa fa-list"></span>검색초기화
+            </button>
+            <button type="button" class="btn btn-primary" onclick="goExcel();">
+                <span class="fa fa-file-excel-o"></span>엑셀다운로드
+            </button>
+        </div>
+    </div>
+</form><br />
+<table class="table table-bordered table-condensed table-list">
+   
+    <tr>
+        <th rowspan="2">구매일자</th>
+        <th rowspan="2">수수료발생일</th>
+        <th rowspan="2">총구매건수</th>
+        <th colspan="11">총구매액</th>
+        <th rowspan="2">총수수료</th>
+        <th rowspan="2">수수료상태</th>
+    </tr>
+    <tr>
+        <th>6개월</th>
+        <th>12개월</th>
+        <th>15개월</th>
+        <th>18개월</th>
+        <th>24개월</th>
+        <th>6개월+PAD</th>
+        <th>12개월+PAD</th>
+        <th>15개월+PAD</th>
+        <th>18개월+PAD</th>
+        <th>24개월+PAD</th>
+        <th>총구매액</th>
+    </tr>
+    @if (Model != null)
+    {
+        int totalFee = 0;
+        @foreach (var item in Model)
+        {
+            string OrderDate = BoardLibrary.FuncShowDate(@item.orderDate);
+            string feeDate = BoardLibrary.FuncShowDate(@item.FeeDate);
+            int orderCount1 =  BoardLibrary.FuncGetOrderCountType1(OrderDate, 1001, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "A");
+            int orderPay1 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1001, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee1 = orderCount1 * 330000;
+
+            int orderCount2 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1002, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "A");
+            int orderPay2 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1002, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee2 = orderCount2 * 550000;
+
+            int orderCount3 =  BoardLibrary.FuncGetOrderCountType1(OrderDate, 1039, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "A");
+            int orderPay3 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1039, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee3 = orderCount3 * 616000;
+
+            int orderCount4 =  BoardLibrary.FuncGetOrderCountType1(OrderDate, 1041, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "A");
+            int orderPay4 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1041, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee4 = orderCount4 * 682000;
+
+            int orderCount5 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1003, 1005, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "A");
+            int orderPay5 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1003, 1005, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee5 = orderCount5 * 330000;
+
+            int orderCount6 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1038, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay6 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1038, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee6 = orderCount6 * 550000;
+
+            int orderCount7 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1004, 1006, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx, "A");
+            int orderPay7 = BoardLibrary.FuncGetOrderCountType2(OrderDate, 1004, 1006, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee7 = orderCount7 * 6160000;
+
+            int orderCount8 =  BoardLibrary.FuncGetOrderCountType1(OrderDate, 1040, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "A");
+            int orderPay8 = BoardLibrary.FuncGetOrderCountType1(OrderDate, 1040, @ViewBag.FeeStatus, @ViewBag.SessioncompanyID, @ViewBag.lpidx,  "B");
+            int orderFee8 = orderCount8* 6820000;
+
+            int dealFee = orderFee1 + orderFee2 + orderFee3 + orderFee4 + orderFee5 + orderFee6 + orderFee7 + orderFee8;
+            totalFee = totalFee + dealFee;
+            <tr>
+                <td>@(OrderDate)</td>
+                <td>@(feeDate)</td>
+                <td>@item.orderCount</td>
+                <td>[@orderCount1]건<br/> @orderPay1 원</td>
+                <td>[@orderCount2]건<br /> @orderPay2 원</td>
+                <td>[@orderCount3]건<br /> @orderPay3 원</td>
+                <td>-</td>
+                <td>[@orderCount4]건<br /> @orderPay4 원</td>
+                <td>[@orderCount5]건<br /> @orderPay5 원</td>
+                <td>[@orderCount6]건<br /> @orderPay6 원</td>
+                <td>[@orderCount7]건<br /> @orderPay7 원</td>
+                <td>-</td>
+                <td>[@orderCount8]건<br /> @orderPay8 원</td>
+                
+                <td>@item.payAmout</td>
+                <td>@dealFee</td>
+                <td>@item.feeStatus</td>
+            </tr>
+
+        }
+        <tr>
+            <th>총수수료</th>
+            <td colspan="15" style="text-align:right"><strong style="color:red;">@totalFee</strong>원</td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td colspan="15" style="text-align:center">결제내역이 없습니다.</td>
+        </tr>
+
+
+    }
+
+
+
+
+</table>
+

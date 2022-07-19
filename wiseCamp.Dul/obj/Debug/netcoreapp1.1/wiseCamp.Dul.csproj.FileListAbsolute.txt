@@ -1,0 +1,8 @@
+J:\aspNet\wiseCamp\wiseCamp.Dul\bin\Debug\netcoreapp1.1\wiseCamp.Dul.deps.json
+J:\aspNet\wiseCamp\wiseCamp.Dul\bin\Debug\netcoreapp1.1\wiseCamp.Dul.dll
+J:\aspNet\wiseCamp\wiseCamp.Dul\bin\Debug\netcoreapp1.1\wiseCamp.Dul.pdb
+J:\aspNet\wiseCamp\wiseCamp.Dul\obj\Debug\netcoreapp1.1\wiseCamp.Dul.csprojResolveAssemblyReference.cache
+J:\aspNet\wiseCamp\wiseCamp.Dul\obj\Debug\netcoreapp1.1\wiseCamp.Dul.csproj.CoreCompileInputs.cache
+J:\aspNet\wiseCamp\wiseCamp.Dul\obj\Debug\netcoreapp1.1\wiseCamp.Dul.AssemblyInfo.cs
+J:\aspNet\wiseCamp\wiseCamp.Dul\obj\Debug\netcoreapp1.1\wiseCamp.Dul.dll
+J:\aspNet\wiseCamp\wiseCamp.Dul\obj\Debug\netcoreapp1.1\wiseCamp.Dul.pdb

@@ -1,0 +1,222 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+@inject IMemberRepository DnnRepo
+
+
+@model IEnumerable<Member>
+
+@{ 
+    Layout = "_GNB";
+}
+<script language="javascript">
+    $(document).ready(function () {
+        if ("@ViewBag.profInfo" != "") {
+            $("Select[name='profInfo']").val("@ViewBag.profInfo");
+        }
+        if ("@ViewBag.memInfoCate" != "") {
+            $("Select[name='memInfoCate']").val("@ViewBag.memInfoCate");
+        }
+        if ("@ViewBag.memStatus" != "") {
+            $("Select[name='memStatus']").val("@ViewBag.memStatus");
+        }
+        if ("@ViewBag.enterRoot" != "") {
+            $("Select[name='enterRoot']").val("@ViewBag.enterRoot");
+        }
+    
+
+    });
+
+    function goOrderByflag(btnName) {
+        $("input[name='OrderByFlag']").val(btnName);
+        var frm = document.searchForm;
+        frm.action = "/Member/Index";
+        frm.submit();
+    }
+
+    function goSearchAction() {
+       
+        var frm = document.searchForm;
+        frm.action = "/Member/Index";
+        frm.submit();
+    }
+
+    function goExcel() {
+        var frm = document.searchForm;
+        frm.action = "/Member/Excel";
+        frm.submit();
+
+    }
+</script>
+
+<!-- 검색폼 -->
+<form class="form-inline" method="post" name="searchForm">
+        <input type="hidden" name="OrderByFlag" value="A"/>
+        <input type="hidden" name="searchModeflag" value="true" />
+        <table class="table table-bordered table-condensed table-form">
+            <tbody>
+                <tr class="hiddenTR">
+                    <th width="100">교사정보</th>
+                    <td class="aLeft">
+                        <select name="profInfo" id="profInfo" class="form-control" style="width:140px;" >
+                            <option value="">--교사정보검색--</option>
+                            <option value="total.mainprofID">담임교사ID</option>
+                            <option value="total.subprofID">추천교사ID</option>
+                        </select>
+                        <input type="text" name="profInfoText" class="form-control input-sm " value="@ViewBag.profInfoText" style="width:200px;">                   
+                    </td>
+                </tr>
+                <tr class="hiddenTR">
+                    <th width="100">회원정보</th>
+                    <td class="aLeft">
+                       
+                        <select name="memInfoCate" class="form-control" style="width:170px;" >
+                            <option value="">--회원정보검색--</option>
+                            <option value="total.mem_Id" > 수박씨닷컴ID</option>
+                            <option value="total.m_Name" >수박씨닷컴회원명</option>
+                            <option value="total.m_HP"  >수박씨닷컴휴대폰번호</option>
+                            <option value="total.familysiteMemID" >와이즈캠프ID</option>
+                            <option value="total.familysiteMemName" > 와이즈캠프회원명</option>                           
+                        </select>
+                        <input type="text" name="memInfoText" class="form-control input-sm " value="@ViewBag.memInfoText" style="width:200px;">
+                        
+                    </td>
+                </tr>
+                <tr class="hiddenTR">
+                    <th width="100">회원상태</th>
+                    <td class="aLeft">
+                        
+                        <select name="memStatus" class="form-control" style="width:140px;">
+                            <option value="">--회원상태검색--</option>
+                            <option value="B">가입이전</option>
+                            <option value="F">가입완료</option>
+                            <option value="N">구매불가</option>
+                            <option value="BV">구매완료</option>
+                            <option value="BC">구매취소</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="hiddenTR">
+                    <th width="100">가입경로</th>
+                    <td class="aLeft">
+                        <select name="enterRoot" class="form-control" style="width:140px;">
+                            <option value="">--가입경로검색--</option>
+                            <option value="1002">와이즈캠프</option>
+                            <option value="1003">100UP수학</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="hiddenTR">
+                    <th width="100">가입일자</th>
+                    <td class="aLeft">
+                        <div class="input-group input-group-sm" style="width:180px;">
+                            <input type="text" class="form-control jQueryCalendar" name="memberStartDate" placeholder="시작일" value="@ViewBag.memberStartDate" />
+                            <span class="input-group-addon"><span class="fa fa-arrow-right"></span></span>
+                            <input type="text" class="form-control jQueryCalendar" name="memberEndDate" placeholder="종료일" value="@ViewBag.memberEndDate" />
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="center-block pagenation-block">
+            <div class="btn-group pull-right" role="group" aria-label="게시판버튼" style="margin:0.5em 1em;">
+                <button type="button" class="btn btn-primary" onclick="goSearchAction();">
+                    <span class="fa fa-search"></span>검색
+                </button>
+                <button type="button" class="btn btn-primary" onclick="javascript:location.href='/Member/Index';">
+                    <span class="fa fa-list"></span>검색초기화
+                </button>
+                <button type="button" class="btn btn-primary" onclick="goExcel();">
+                    <span class="fa fa-file-excel-o"></span>엑셀다운로드
+                </button>
+            </div>
+        </div>
+    </form><br/>
+    <table class="table table-bordered table-condensed table-list">
+       
+        <tr>
+            <th>번호</th>
+            <th onclick="goOrderByflag('B');" style="cursor:pointer;">수박씨ID</th>
+            <th onclick="goOrderByflag('C');" style="cursor:pointer;">수박씨회원명</th>
+            <th onclick="goOrderByflag('D');" style="cursor:pointer;">수박씨연락처</th>
+            <th onclick="goOrderByflag('E');" style="cursor:pointer;">담임교사ID</th>
+            <th onclick="goOrderByflag('F');" style="cursor:pointer;">담임교사명</th>
+            <th onclick="goOrderByflag('G');" style="cursor:pointer;">추천교사ID</th>
+            <th onclick="goOrderByflag('H');" style="cursor:pointer;">추천교사명</th>
+            <th onclick="goOrderByflag('I');" style="cursor:pointer;">와이즈캠프ID</th>
+            <th onclick="goOrderByflag('J');" style="cursor:pointer;">와이즈캠프회명</th>
+            <th>가입경로</th>
+            <th>수박씨가입일</th>
+            <th>회원상태</th>
+            <th>추천수정</th>
+        </tr>
+        @if (Model != null)
+        {
+            
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.mem_ID</td>
+                    <td>@item.m_Name</td>
+                    <td>@item.m_HP</td>
+                    <td>@item.mainProfID</td>
+                    <td>@item.mainProfName</td>
+                    <td>@item.subProfID</td>
+                    <td>@item.subProfName</td>
+                    <td>@item.familysiteMemID</td>
+                    <td>@item.familysiteMemName</td>
+                    <td>@item.SiteGbName</td>
+                    <td>@item.reg_date</td>
+                    <td>
+                        @if (@item.CancelCount > 0)
+                        {
+                            <font style="color:red">구매취소</font>
+                        }
+                        else
+                        {
+                            @if (@item.orderCount > 0)
+                            {
+                                <font style="color:blue">구매완료</font>
+                            }
+                            else
+                            {
+                                @if (item.buyYnFlag != "")
+                                {
+                                    <span>구매불가</span>
+                                }
+                                else
+                                {
+                                    @if (item.mem_ID == "" || item.mem_ID == null)
+                                    {
+                                        <span>가입이전</span>
+                                    }
+                                    else
+                                    {
+                                        <span>가입완료</span>
+                                    }
+                                }
+                            }
+                        }
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="openPopup('/Member/editsubProfID?memIdx=@item.Idx', '600', '400');">
+                            <span class="fa fa-file-text-o"></span>추천수정
+                        </button>
+                    </td>
+                </tr>
+               
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="14" style="text-align:center">조회된 데이터가 없습니다.</td>
+            </tr>
+        }
+    </table>
+    <div class="center-block pagenation-block">
+        <dnn-paging-helper url="@Context.Request.Path" page-index='Convert.ToInt32(Context.Request.Query["gotoPage"])' page-size="30" record-count="@ViewBag.TotalRecord" search-mode="false" search-filed="" search-query="">
+        </dnn-paging-helper>
+    </div>

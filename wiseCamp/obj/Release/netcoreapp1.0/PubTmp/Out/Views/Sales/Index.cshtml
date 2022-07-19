@@ -1,0 +1,239 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+@inject IMemberRepository DnnRepo
+
+<!--결제현황-->
+@model IEnumerable<Sales>
+
+@{
+    Layout = "_GNB";
+}
+<script language="javascript">
+    $(document).ready(function () {
+        if ("@ViewBag.profInfo" != "") {
+            $("Select[name='profInfo']").val("@ViewBag.profInfo");
+        }
+        if ("@ViewBag.productInfo" != "") {
+            $("Select[name='productInfo']").val("@ViewBag.productInfo");
+        }
+        if ("@ViewBag.memInfoCate" != "") {
+            $("Select[name='memInfoCate']").val("@ViewBag.memInfoCate");
+        }
+        if ("@ViewBag.orderStatus" != "") {
+            $("Select[name='orderStatus']").val("@ViewBag.orderStatus");
+        }
+        if ("@ViewBag.dateCategory" != "") {
+            $("Select[name='dateCategory']").val("@ViewBag.dateCategory");
+        }
+
+        if ("@ViewBag.findItemType1" == "G1") {
+           $("input[name='findItemType1']").prop("checked", true);
+        } else {
+            $("input[name='findItemType1']").prop("checked", false);
+        }
+
+        if ("@ViewBag.findItemType2" == "G2") {
+            $("input[name='findItemType2']").prop("checked", true);
+        } else {
+            $("input[name='findItemType2']").prop("checked", false);
+        }
+
+
+
+
+        });
+
+    function goOrderByflag(btnName) {
+        $("input[name='OrderByFlag']").val(btnName);
+        var frm = document.searchForm;
+        frm.action = "/Member/Index";
+        frm.submit();
+    }
+
+    function goSearchAction() {
+
+        var frm = document.searchForm;
+        frm.action = "/Sales/Index";
+        frm.submit();
+    }
+
+    function goOrderByflag(btnName) {
+        $("input[name='OrderByFlag']").val(btnName);
+        goSearchAction();
+    }
+
+    function goExcel() {
+        var frm = document.searchForm;
+        frm.action = "/Sales/Excel";
+        frm.submit();
+
+    }
+</script>
+
+<!-- 검색폼 -->
+<form class="form-inline" method="post" name="searchForm">
+    <input type="hidden" name="OrderByFlag" value="A" />
+    <input type="hidden" name="searchModeflag" value="true" />
+    <table class="table table-bordered table-condensed table-form">
+        <tbody>
+            <tr class="hiddenTR">
+                <th width="100">추천교사 정보</th>
+                <td class="aLeft">
+                    <select name="profInfo" id="profInfo" class="form-control" style="width:140px;">
+                      <option value="total.subprofID" >추천교사ID</option>
+                    </select>
+                    <input type="text" name="profInfoText" class="form-control input-sm " value="@ViewBag.profInfoText" style="width:200px;">
+                </td>
+            </tr>
+            <tr class="hiddenTR">
+                <th width="100">상품정보</th>
+                <td class="aLeft">
+                    <select  Name="productInfo" id="productInfo" class="form-control" asp-items="@(new SelectList(ViewBag.SalesProductItemList,"lp_idx","lp_title"))"></select>
+                    
+                </td>
+            </tr>
+            <tr class="hiddenTR">
+                <th width="100">상품선택</th>
+                <td class="aLeft">
+                    <input type="checkbox" name="findItemType1" value="G1" /> 무한수강(일시납)
+                    <input type="checkbox" name="findItemType2" value="G2" /> 무한수강(월납)
+                  
+                  
+                </td>
+            </tr>
+
+            <tr class="hiddenTR">
+                <th width="100">회원정보</th>
+                <td class="aLeft">
+
+                    <select name="memInfoCate" class="form-control" style="width:170px;">
+                        <option value="">--회원정보검색--</option>
+                        <option value="total.mem_Id"> 수박씨닷컴ID</option>
+                        <option value="total.m_Name">수박씨닷컴회원명</option>
+                        <option value="total.m_HP">수박씨닷컴휴대폰번호</option>
+                        <option value="total.familysiteMemID">와이즈캠프ID</option>
+                        <option value="total.familysiteMemName"> 와이즈캠프회원명</option>
+                    </select>
+                    <input type="text" name="memInfoText" class="form-control input-sm " value="@ViewBag.memInfoText" style="width:200px;">
+
+                </td>
+            </tr>
+            <tr class="hiddenTR">
+                <th width="100">결제상태</th>
+                <td class="aLeft">
+
+                    <select name="orderStatus" class="form-control" style="width:140px;">
+                        <option value="">--결제상태검색--</option>
+                        <option value="1">결제완료</option>
+                        <option value="0">결제대기</option>
+                        <option value="2">주문취소</option>
+                        <option value="3">주문삭제</option>                        
+                    </select>
+                </td>
+            </tr>
+          
+            <tr class="hiddenTR">
+                <th width="100">일자검색</th>
+                <td class="aLeft">
+                    <select name="dateCategory" class="form-control" style="width:120px;">
+                        <option value="R">수박씨가입일</option>
+                        <option value="O">결제일</option>
+                        <option value="C">취소일</option>
+                    </select>
+                    <div class="input-group input-group-sm" style="width:180px;">
+                        <input type="text" class="form-control jQueryCalendar" name="startDate" placeholder="시작일" value="@ViewBag.startDate" />
+                        <span class="input-group-addon"><span class="fa fa-arrow-right"></span></span>
+                        <input type="text" class="form-control jQueryCalendar" name="endDate" placeholder="종료일" value="@ViewBag.endDate" />
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="center-block pagenation-block">
+        <div class="btn-group pull-right" role="group" aria-label="게시판버튼" style="margin:0.5em 1em;">
+            <button type="button" class="btn btn-primary" onclick="goSearchAction();">
+                <span class="fa fa-search"></span>검색
+            </button>
+            <button type="button" class="btn btn-primary" onclick="javascript:location.href='/Sales/Index';">
+                <span class="fa fa-list"></span>검색초기화
+            </button>
+            <button type="button" class="btn btn-primary" onclick="goExcel();">
+                <span class="fa fa-file-excel-o"></span>엑셀다운로드
+            </button>
+        </div>
+    </div>
+</form><br />
+<table class="table table-bordered table-condensed table-list">
+    
+    <tr>
+        <th>번호</th>      
+        <th>추천교사</th>
+        <th>와이즈캠프ID</th>
+        <th>구매상품</th>
+        <th>결제금액</th>
+        <th>결제일자</th>
+        <th>회원상태</th>
+        <th>결제구분</th>
+        <th>추천수정</th>
+    </tr>
+    @if (Model != null)
+    {
+
+        @foreach (var item in Model)
+        {
+            string orderMemStatus = BoardLibrary.FuncGetOrderMemberstatus(@item.fpisDel, @item.isMonthlyProduct, @item.orderID, @item.lp_idx, @item.fpExpireDate);
+            <tr>
+                <td>@item.trNo</td>         
+                <td>@item.subProfName<br/>[@item.subProfID]</td>          
+                <td>@item.familysitememID</td>
+                <td>@item.itemName</td>
+                <td>@item.payAmount</td>
+                <td>@item.authDate</td>
+                <td>@orderMemStatus</td>
+                <td>
+                    @if (item.orderStatus == "0")
+                    {
+                       <span>결제대기</span>
+                    }
+                    @if (item.orderStatus == "1")
+                    {
+                        <strong><font style="color:blue">결제완료</font></strong>
+                    }
+                    @if (item.orderStatus == "2")
+                    {
+                        <strong><font style="color:red">주문취소</font></strong>
+                    }
+                    @if (item.orderStatus == "3")
+                    {
+                        <strong><font style="color:green">주문삭제</font></strong>
+                    }
+
+
+
+
+
+
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="openPopup('/Member/editsubProfID?memIdx=@item.Idx', '600', '400');">
+                        <span class="fa fa-file-text-o"></span>추천수정
+                    </button>
+                </td>
+            </tr>
+
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="13" style="text-align:center">조회된 데이터가 없습니다.</td>
+        </tr>
+    }
+</table>
+<div class="center-block pagenation-block">
+    <dnn-paging-helper url="@Context.Request.Path" page-index='Convert.ToInt32(Context.Request.Query["gotoPage"])' page-size="@ViewBag.pageSize" record-count="@ViewBag.TotalRecord" search-mode="false" search-filed="" search-query="">
+    </dnn-paging-helper>
+</div>
+

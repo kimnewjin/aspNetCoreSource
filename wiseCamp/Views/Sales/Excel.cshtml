@@ -1,0 +1,93 @@
+﻿@using wiseCamp.Dul
+@using wiseCamp.Models
+
+<!--결제현황-->
+@model IEnumerable<SalesExcel>
+@{
+    Layout = null;
+}
+
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+</head>
+<body>
+    <table border="1">
+
+        <tr>
+          
+            <th>수박씨ID</th>
+            <th>수박씨회원명</th>
+            <th>수박씨가입일</th>
+            <th>수박씨연락처</th>
+            <th>추천교사ID</th>
+            <th>추천교사명</th>
+            <th>와이즈캠프ID</th>
+            <th>구매상품</th>
+            <th>결제금액</th>
+            <th>결제/취소일자</th>
+            <th>결제구분</th>
+            <th>추천수정</th>
+        </tr>
+        @if (Model != null)
+        {
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                  
+                    <td>@item.mem_ID</td>
+                    <td>@item.m_Name</td>
+                    <td>@item.reg_Date</td>
+                    <td>@item.m_HP</td>
+                    <td>@item.subProfID</td>
+                    <td>@item.subProfName</td>
+                    <td>@item.familysitememID</td>
+                    <td>@item.itemName</td>
+                    <td>@item.payAmount</td>
+                    <td>@item.authDate</td>
+                    <td>
+                        @if (item.orderStatus == "0")
+                    {
+                            <span>결제대기</span>
+                        }
+                        @if (item.orderStatus == "1")
+                    {
+                            <strong><font style="color:blue">결제완료</font></strong>
+                        }
+                        @if (item.orderStatus == "2")
+                    {
+                            <strong><font style="color:red">주문취소</font></strong>
+                        }
+                        @if (item.orderStatus == "3")
+                    {
+                            <strong><font style="color:green">주문삭제</font></strong>
+                        }
+
+
+
+
+
+
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="openPopup('/Member/editsubProfID?memIdx=@item.Idx', '600', '400');">
+                            <span class="fa fa-file-text-o"></span>추천수정
+                        </button>
+                    </td>
+                </tr>
+
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="13" style="text-align:center">조회된 데이터가 없습니다.</td>
+            </tr>
+        }
+    </table>
+
+    </body>
+</html>

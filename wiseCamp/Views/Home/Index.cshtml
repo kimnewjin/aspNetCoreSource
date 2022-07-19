@@ -1,0 +1,188 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    //@User.FindFirst("UserID").Value
+   <script language="javascript">
+     //  location.href = "/Member/Index";
+   </script>
+}
+else
+{
+    <style type="text/css">
+        body {
+            height: 100%;
+        }
+
+        .container {
+            /*border:1px solid;*/
+            margin: 10% 12% 10% 12%;
+            width: auto;
+            height: 100%;
+        }
+
+        .titleImg {
+            /*border:1px solid;*/
+            height: auto;
+            vertical-align: middle;
+            margin: 1% 1% 1% 1%;
+            padding: 1% 1% 1% 1%;
+        }
+
+        .loginArea {
+            /*border:1px solid;*/
+            border-radius: 10px;
+            margin: 0 1% 1% 1%;
+            padding: 3% 3% 3% 12%;
+            background-color: #79ABFF;
+            position: relative;
+        }
+
+        .innerLoginArea {
+            /*border:1px solid;*/
+            position: relative;
+            width: 45%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .loginArea0 {
+            background-color: #79ABFF;
+            padding: 3% 10% 10% 3%;
+            border-radius: 15px;
+        }
+
+        .loginArea1 {
+            background-color: #A0BAED;
+            border: 4px solid;
+            border-color: #5586EB;
+            padding: 1% 5% 5% 5%;
+            border-radius: 15px;
+            vertical-align: middle;
+        }
+
+        .departTitle {
+            /*border:1px solid;*/
+            color: white;
+            font-size: 3em;
+        }
+
+        .departTitle1 {
+            /*border:1px solid;*/
+            position: relative;
+            display: block;
+            color: white;
+            padding-top: 5%;
+            font-size: 5em;
+            font-weight: bold;
+        }
+
+        .loginAreaText {
+            /*border:1px solid;*/
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        #loginForm {
+            /*border:1px solid;*/
+            margin: 3% 3% 3% 3%;
+            padding: 4% 2% 2% 2%;
+            display: inline-block;
+        }
+    </style>
+
+<script language="javascript">
+    function goAction() {
+        var frm = document.theForm;
+
+        var userID = $("input[name='userID']").val();
+        var passwd = $("input[name='passWD']").val();
+        var saveid = $("input[name='saveID']:checked").val();
+        var managerCate = $("input[name='managerCate']:checked").val();
+
+        if (managerCate == undefined) {
+            alert('관리자 범주를 선택하세요.');
+            return;
+        }
+
+        if (userID == "") {
+            alert('아이디를 입력하세요');
+            $("input[name='userID']").focus();
+            return;
+        }
+        if (passwd == "") {
+            alert('비밀번호를 입력하세요');
+            $("input[name='passWD']").focus();
+            return;
+        }
+
+        /*if (saveid == "Y" ){
+            setCookie("userid_aczone", userID, 7);
+        }else{
+            setCookie("userid_aczone", userID, -1);
+        }*/
+        frm.action = "/Home/Index/";
+        frm.submit();
+
+    }
+		$(document).ready(function(){
+			$(".form-control").keypress(function(){
+
+				var keyCode = event.keyCode;
+				if (keyCode == "13"){
+                    goAction();
+				}
+			});
+
+
+		});
+</script>
+<div id="wrapper" class="container">
+    <div class="titleImg">
+        <img src="~/images/logo.gif" alt="">
+        <img src="~/images/top_text.gif" alt="" style="float:right;height:15px;">
+    </div>
+    <div id="loginArea" class="loginArea">
+        <div class="innerLoginArea loginArea0">
+            <span class="departTitle">
+                와이즈 캠프
+            </span>
+            <span class="departTitle1">
+                LOGIN
+            </span>
+        </div>
+        <div class="innerLoginArea loginArea1">
+            <div id="loginForm">
+                <form name="theForm" method="post">
+                    <input type="hidden" name="companyID" value="10001" />
+
+                    <input type="radio" name="managerCate" value="1000"><Strong>관리자</Strong>&nbsp;
+
+                    <input type="radio" name="managerCate" value="1001"><Strong>관리교사</Strong>&nbsp;<br/>
+
+                    <label for="inputPassword" class="sr-only">아이디</label>
+                    <input type="text" id="userID" name="userID" class="form-control" placeholder="아이디를 입력하세요" value="">
+                    <label for="inputPassword" class="sr-only">비밀번호</label>
+                    <input type="password" name="passWD" id="passWD" class="form-control" placeholder="비밀번호를 입력하세요">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="saveID" id="saveid" value="Y">아이디 저장
+                        </label>
+                    </div>
+                    <a class="btn btn-lg btn-primary btn-block" Id="submitBtn" onclick="goAction();">
+                        <span class="fa fa-key"></span>&nbsp;로&nbsp;그&nbsp;인
+
+                        
+                    </a>
+                 
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+}
